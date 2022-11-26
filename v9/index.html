@@ -95,7 +95,7 @@
                 draw = () => {
                     c.beginPath();
                     c.moveTo(this.x, this.y);
-                    c.arc(this.x, this.y, 1, 0, 2 * Math.PI, true);
+                    c.arc(this.x, this.y, 0.5, 0, 2 * Math.PI, true);
 
                     c.fillStyle = this.color;
                     c.fill();
@@ -115,7 +115,7 @@
                     this.x += this.dx;
                     this.y += this.dy;
                     
-                    if (this.x < 100 && this.x > -100 && this.y < 100 && this.y > -100 && this.width < this.maxWidth) {
+                    if (this.x < 100 && this.x > 100 && this.y < 100 && this.y > 100 && this.width < this.maxWidth) {
                         this.x -= Math.sin(this.x) * this.maxWidth;
                         this.y -= Math.sin(this.y) * this.maxWidth;
                     } else if (this.width > this.minWidth) {
@@ -128,7 +128,7 @@
 
             let experimentArray = [];
 
-            for (let i = 0; i < 1000; i++) {
+            for (let i = 0; i < 1500; i++) {
                 let width = Math.random();
                 let x = Math.random() * window.innerWidth;
                 let dx = (Math.random() - 0.5) * 1;
