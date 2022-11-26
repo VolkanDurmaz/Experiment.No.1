@@ -70,7 +70,7 @@
                     this.y += this.dy;
 
                     // interactivity
-                    if (this.x < 30 && this.x > 30 && this.y < 30 && this.y > 30 && this.width < this.maxWidth) {
+                    if (this.x < 0 && this.x > 0 && this.y < 0 && this.y > 0 && this.width < this.maxWidth) {
                         this.x -= Math.sin(this.x) * this.maxWidth;
                         this.y -= Math.sin(this.y) * this.maxWidth;
                     } else if (this.width > this.minWidth) {
