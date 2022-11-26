@@ -1,0 +1,125 @@
+<html>
+    <head>
+        <style type="text/css">
+            body {
+                margin: 0;
+                overflow-x: hidden;
+            }
+
+            #canvas {
+                margin: 0;
+                padding: 0;
+                position: fixed;
+                z-index: 1;
+                width: max-content;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="canvas"></canvas>
+        <script>
+            createHex = () => {
+                var hexCode1 = "";
+                var hexValues1 = "0123456789abcdef";
+
+                for (var i = 0; i < 6; i++) {
+                    hexCode1 += hexValues1.charAt(Math.floor(Math.random() * hexValues1.length));
+                }
+                return hexCode1;
+            };
+
+            generate = () => {
+                var deg = Math.floor(Math.random() * 360);
+
+                var gradient = "linear-gradient(" + deg + "deg, " + "#" + createHex() + ", " + "#" + createHex() + ", " + "#" + createHex() + ")";
+
+                document.body.style.background = gradient;
+
+                console.log(gradient);
+            };
+            generate();
+
+            const cvs = document.querySelector("canvas");
+            const c = cvs.getContext("2d");
+
+            cvs.width = window.innerWidth;
+            cvs.height = window.innerHeight;
+
+            window.addEventListener("resize", function () {
+                cvs.width = window.innerWidth;
+                cvs.height = window.innerHeight;
+            });
+
+            class Experiment {
+                constructor(x, y, dx, dy, width) {
+                    this.x = x;
+                    this.y = y;
+                    this.dx = dx;
+                    this.dy = dy;
+                    this.width = width;
+                    this.minWidth = width;
+                    this.maxWidth = width * 3;
+
+                    let rgb = [];
+                    for (let i = 0; i < 3; i++) rgb.push(Math.floor(Math.random() * 255));
+                    this.color = "rgb(" + rgb.join(",") + ")";
+                }
+
+                draw = () => {
+                    c.beginPath();
+                    c.moveTo(this.x, this.y);
+                    c.arc(this.x, this.y, 1, 0, 2 * Math.PI, true);
+
+                    c.fillStyle = this.color;
+                    c.fill();
+
+                    this.update();
+                };
+
+                update = () => {
+                    if (this.x + this.width / 2 >= window.innerWidth || this.x - this.width / 2 <= 0) {
+                        this.dx = -this.dx;
+                    }
+
+                    if (this.y + this.width / 2 >= window.innerHeight || this.y - this.width / 2 <= 0) {
+                        this.dy = -this.dy;
+                    }
+
+                    this.x += this.dx;
+                    this.y += this.dy;
+
+                    if (this.x < 30 && this.x > -30 && this.y < 30 && this.y > -30 && this.width < this.maxWidth) {
+                        this.x -= Math.sin(this.x) * this.maxWidth;
+                        this.y -= Math.sin(this.y) * this.maxWidth;
+                    } else if (this.width > this.minWidth) {
+                        this.width -= 1;
+                        this.x += 1;
+                        this.y += 1;
+                    }
+                };
+            }
+
+            let experimentArray = [];
+
+            for (let i = 0; i < 1000; i++) {
+                let width = Math.random();
+                let x = Math.random() * window.innerWidth;
+                let dx = (Math.random() - 0.5) * 1;
+                let y = Math.random() * window.innerHeight;
+                let dy = (Math.random() - 0.5) * 1;
+                experimentArray.push(new Experiment(x, y, dx, dy, width));
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                experimentArray.forEach((experiment) => {
+                    experiment.draw();
+                });
+            }
+
+            animate();
+        </script>
+    </body>
+</html>
