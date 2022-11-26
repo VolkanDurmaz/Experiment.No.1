@@ -1,0 +1,101 @@
+<html>
+    <head>
+        <style type="text/css">
+            body {
+                margin: 0;
+                overflow-x: hidden;
+            }
+
+            #canvas {
+                margin: 0;
+                padding: 0;
+                position: fixed;
+                background: #247881;
+                z-index: 1;
+                width: max-content;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="canvas"></canvas>
+        <script>
+            const cvs = document.querySelector("canvas");
+            const c = cvs.getContext("2d");
+
+            cvs.width = window.innerWidth;
+            cvs.height = window.innerHeight;
+
+            window.addEventListener("resize", function () {
+                cvs.width = window.innerWidth;
+                cvs.height = window.innerHeight;
+            });
+
+            class Experiment {
+                constructor(x, y, dx, dy, width) {
+                    this.x = x;
+                    this.y = y;
+                    this.dx = dx;
+                    this.dy = dy;
+                    this.width = width;
+                    this.minWidth = width;
+                    this.maxWidth = width * 3;
+
+                    let colorArray = ["#43919B", "#30AADD", "#00FFC6", "#FFFFFF"];
+
+                    this.color = colorArray[Math.floor(Math.random() * colorArray.length)];
+                }
+
+                draw = () => {
+                    c.beginPath();
+                    c.arc(this.x, this.y, .1, 0, 2 * Math.PI, true);
+                    c.fillStyle = this.color;
+                    c.fill();
+
+                    this.update();
+                };
+
+                update = () => {
+                    if (this.x + this.width / 2 >= window.innerWidth || this.x - this.width / 2 <= 0) {
+                        this.dx = -this.dx;
+                    }
+                    if (this.y + this.width / 2 >= window.innerHeight || this.y - this.width / 2 <= 0) {
+                        this.dy = -this.dy;
+                    }
+                    this.x += this.dx;
+                    this.y += this.dy;
+
+                    if (this.x < 100 && this.x > 100 && this.y < 100 && this.y > 100 && this.width < this.maxWidth) {
+                        this.x -= Math.random() * this.maxWidth;
+                        this.y -= Math.random() * this.maxWidth;
+                    } else if (this.width > this.minWidth) {
+                        this.width -= 1;
+                        this.x += 1;
+                        this.y += 1;
+                    }
+                };
+            }
+
+            let experimentArray = [];
+
+            for (let i = 0; i < 1000; i++) {
+                let width = Math.random();
+                let x = Math.random() * window.innerWidth;
+                let dx = (Math.random() - 0.5) * 2;
+                let y = Math.random() * window.innerHeight;
+                let dy = (Math.random() - 0.5) * 2;
+                experimentArray.push(new Experiment(x, y, dx, dy, width));
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                experimentArray.forEach((experiment) => {
+                    experiment.draw();
+                });
+            }
+
+            animate();
+        </script>
+    </body>
+</html>
