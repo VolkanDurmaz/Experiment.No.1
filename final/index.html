@@ -29,7 +29,7 @@
                 var hexValues1 = "0123456789abcdef";
 
                 for (var i = 0; i < 6; i++) {
-                    hexCode1 += hexValues1.charAt(Math.floor(fxrand() * hexValues1.length));
+                    hexCode1 += hexValues1.charAt(Math.floor(Math.random() * hexValues1.length));
                 }
                 return hexCode1;
             };
@@ -39,7 +39,7 @@
             cvs.width = window.innerWidth;
             cvs.height = window.innerHeight;
 
-            var colorArray2 = c.createLinearGradient(canvas.width * fxrand(), 0, canvas.width * fxrand(), canvas.height);
+            var colorArray2 = c.createLinearGradient(canvas.width * Math.random(), 0, canvas.width * Math.random(), canvas.height);
 
             colorArray2.addColorStop(0, "#" + createHex());
             colorArray2.addColorStop(.5, "#" + createHex());
@@ -64,13 +64,13 @@
                     this.minWidth = width;
                     this.maxWidth = width * 3;
 
-                    this.color2 = colorArray[Math.floor(fxrand() * colorArray.length)];
+                    this.color2 = colorArray[Math.floor(Math.random() * colorArray.length)];
                 }
 
                 draw = () => {
                     c2.beginPath();
                     c2.moveTo(this.x2, this.y2);
-                    c2.arc(this.x2, this.y2, fxrand()/2, 0, 2 * Math.PI, true);
+                    c2.arc(this.x2, this.y2, Math.random()/2, 0, 2 * Math.PI, true);
                     c2.fillStyle = this.color2;
                     c2.fill();
 
@@ -102,11 +102,11 @@
             let experimentArray = [];
 
             for (let i = 0; i < canvas.width ; i++) {
-                let width = fxrand();
-                let x2 = fxrand() * window.innerWidth;
-                let dx2 = (fxrand() - 0.5) * 1;
-                let y2 = fxrand() * window.innerHeight;
-                let dy2 = (fxrand() - 0.5) * 1;
+                let width = Math.random();
+                let x2 = Math.random() * window.innerWidth;
+                let dx2 = (Math.random() - 0.5) * 1;
+                let y2 = Math.random() * window.innerHeight;
+                let dy2 = (Math.random() - 0.5) * 1;
                 experimentArray.push(new Experiment(x2, y2, dx2, dy2, width));
             }
 
