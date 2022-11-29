@@ -1,0 +1,124 @@
+<html>
+    <head>
+        <style type="text/css">
+            html, body {
+                margin: 0;
+                justify-content: center;
+                align-items: center;
+                display:flex;
+                overflow-x: hidden;
+            }
+
+            #canvas {
+                margin: 0;
+                position: relative;
+                z-index: 1;
+                display: flex;
+             }
+        </style>
+    </head>
+    <body>
+        <canvas id="canvas"></canvas>
+        <script>
+            const cvs = document.querySelector("canvas");
+            const c = cvs.getContext("2d");
+            const c2 = cvs.getContext("2d");
+
+            createHex = () => {
+                var hexCode1 = "";
+                var hexValues1 = "0123456789abcdef";
+
+                for (var i = 0; i < 6; i++) {
+                    hexCode1 += hexValues1.charAt(Math.floor(fxrand() * hexValues1.length));
+                }
+                return hexCode1;
+            };
+
+            let colorArray = ["#" + createHex(), "#" + createHex(), "#" + createHex(), "#" + createHex()];
+
+            cvs.width = window.innerWidth;
+            cvs.height = window.innerHeight;
+
+            var colorArray2 = c.createLinearGradient(canvas.width * fxrand(), 0, canvas.width * fxrand(), canvas.height);
+
+            colorArray2.addColorStop(0, "#" + createHex());
+            colorArray2.addColorStop(.5, "#" + createHex());
+            colorArray2.addColorStop(1, "#" + createHex());
+            
+
+            c.fillStyle = colorArray2;
+            c.fillRect(0, 0, innerWidth, innerHeight);
+
+            window.addEventListener("resize", function () {
+                cvs.style.width = innerWidth;
+                cvs.style.height = innerHeight;
+            });
+
+            class Experiment {
+                constructor(x2, y2, dx2, dy2, width) {
+                    this.x2 = x2;
+                    this.y2 = y2;
+                    this.dx2 = dx2;
+                    this.dy2 = dy2;
+                    this.width = width;
+                    this.minWidth = width;
+                    this.maxWidth = width * 3;
+
+                    this.color2 = colorArray[Math.floor(fxrand() * colorArray.length)];
+                }
+
+                draw = () => {
+                    c2.beginPath();
+                    c2.moveTo(this.x2, this.y2);
+                    c2.arc(this.x2, this.y2, fxrand()/2, 0, 2 * Math.PI, true);
+                    c2.fillStyle = this.color2;
+                    c2.fill();
+
+                    this.update();
+                };
+
+                update = () => {
+                    if (this.x2 + this.width / 2 >= window.canvas.width || this.x2 - this.width / 2 <= 0) {
+                        this.dx2 = -this.dx2;
+                    }
+                    if (this.y2 + this.width / 2 >= window.canvas.height || this.y2 - this.width / 2 <= 0) {
+                        this.dy2 = -this.dy2;
+                    }
+
+                    this.x2 += this.dx2;
+                    this.y2 += this.dy2;
+
+                    if (this.x2 < 100 && this.x2 > 100 && this.y2 < 100 && this.y2 > 100 && this.width < this.maxWidth) {
+                        this.x2 -= this.maxWidth;
+                        this.y2 -= this.maxWidth;
+                    } else if (this.width > this.minWidth) {
+                        this.width -= 1;
+                        this.x2 += 1;
+                        this.y2 += 1;
+                    }
+                };
+            }
+
+            let experimentArray = [];
+
+            for (let i = 0; i < canvas.width ; i++) {
+                let width = fxrand();
+                let x2 = fxrand() * window.innerWidth;
+                let dx2 = (fxrand() - 0.5) * 1;
+                let y2 = fxrand() * window.innerHeight;
+                let dy2 = (fxrand() - 0.5) * 1;
+                experimentArray.push(new Experiment(x2, y2, dx2, dy2, width));
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                experimentArray.forEach((experiment) => {
+                    experiment.draw();
+                });
+            }
+
+            animate();
+        </script>
+    </body>
+</html>
